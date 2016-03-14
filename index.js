@@ -32,7 +32,7 @@ module.exports = {
       {
         type: 'input',
         name: 'jira',
-        message: 'JIRA Ticket ID:\n'
+        message: 'JIRA Ticket ID: '
       }, {
         type: 'list',
         name: 'type',
