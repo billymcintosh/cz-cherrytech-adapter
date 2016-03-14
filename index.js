@@ -30,6 +30,10 @@ module.exports = {
     // collection library if you prefer.
     cz.prompt([
       {
+        type: 'input',
+        name: 'jira',
+        message: 'JIRA Ticket ID:\n'
+      }, {
         type: 'list',
         name: 'type',
         message: 'Select the type of change that you\'re committing:',
@@ -92,7 +96,7 @@ module.exports = {
       scope = scope ? '(' + answers.scope.trim() + ')' : '';
 
       // Hard limit this line
-      var head = (answers.type + scope + ': ' + answers.subject.trim()).slice(0, maxLineWidth);
+      var head = answers.jira + ' ' + (answers.type + scope + ': ' + answers.subject.trim()).slice(0, maxLineWidth);
 
       // Wrap these lines at 100 characters
       var body = wrap(answers.body, wrapOptions);
