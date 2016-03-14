@@ -38,71 +38,79 @@ module.exports = {
         name: 'type',
         message: 'Select the type of change that you\'re committing:',
         choices: [
-        {
-          name: 'feat:     A new feature',
-          value: 'feat'
+          {
+            name: 'feat:     A new feature',
+            value: 'feat'
+          }, {
+            name: 'fix:      A bug fix',
+            value: 'fix'
+          }, {
+            name: 'docs:     Documentation only changes',
+            value: 'docs'
+          }, {
+            name: 'style:    Changes that do not affect the meaning of the code\n            (white-space, formatting, missing semi-colons, etc.)',
+            value: 'style'
+          }, {
+            name: 'refactor: A code change that neither fixes a bug or adds a feature',
+            value: 'refactor'
+          }, {
+            name: 'perf:     A code change that improves performance',
+            value: 'perf'
+          }, {
+            name: 'test:     Adding missing tests',
+            value: 'test'
+          }, {
+            name: 'chore:    Changes to the build process or auxiliary tools\n            and libraries such as documentation generation',
+            value: 'chore'
+          }]
         }, {
-          name: 'fix:      A bug fix',
-          value: 'fix'
+          type: 'input',
+          name: 'scope',
+          message: 'Denote the scope of this change ($location, $browser, $compile, etc.):\n'
         }, {
-          name: 'docs:     Documentation only changes',
-          value: 'docs'
+          type: 'input',
+          name: 'subject',
+          message: 'Write a short, imperative tense description of the change:\n'
         }, {
-          name: 'style:    Changes that do not affect the meaning of the code\n            (white-space, formatting, missing semi-colons, etc.)',
-          value: 'style'
+          type: 'input',
+          name: 'body',
+          message: 'Provide a longer description of the change:\n'
         }, {
-          name: 'refactor: A code change that neither fixes a bug or adds a feature',
-          value: 'refactor'
-        }, {
-          name: 'perf:     A code change that improves performance',
-          value: 'perf'
-        }, {
-          name: 'test:     Adding missing tests',
-          value: 'test'
-        }, {
-          name: 'chore:    Changes to the build process or auxiliary tools\n            and libraries such as documentation generation',
-          value: 'chore'
-        }]
-      }, {
-        type: 'input',
-        name: 'scope',
-        message: 'Denote the scope of this change ($location, $browser, $compile, etc.):\n'
-      }, {
-        type: 'input',
-        name: 'subject',
-        message: 'Write a short, imperative tense description of the change:\n'
-      }, {
-        type: 'input',
-        name: 'body',
-        message: 'Provide a longer description of the change:\n'
-      }, {
-        type: 'input',
-        name: 'footer',
-        message: 'List any breaking changes or issues closed by this change:\n'
-      }
-    ]).then(function(answers) {
+          type: 'input',
+          name: 'footer',
+          message: 'List any breaking changes or issues closed by this change:\n'
+        }
+      ]).then(function(answers) {
 
-      var maxLineWidth = 100;
+        var maxLineWidth = 100;
 
-      var wrapOptions = {
-        trim: true,
-        newline: '\n',
-        indent:'',
-        width: maxLineWidth
-      };
+        var wrapOptions = {
+          trim: true,
+          newline: '\n',
+          indent: '',
+          width: maxLineWidth
+        };
 
-      // parentheses are only needed when a scope is present
-      var scope = answers.scope.trim();
-      scope = scope ? '(' + answers.scope.trim() + ')' : '';
+        var products = 'CCNEW|FE|SVEAC|SM|SP|SPIL|FAPI|ELNEW|ESNEW|BO';
+        var pattern = new RegExp('(\b' + products + '\b)+-{1}\\d{1,}');
 
-      // Hard limit this line
-      var head = answers.jira + ' ' + (answers.type + scope + ': ' + answers.subject.trim()).slice(0, maxLineWidth);
+        if (pattern.test(answers.jira) === false) {
+          console.log('\nError: JIRA ID must begin with %s\n', products);
+          return;
+        }
 
-      // Wrap these lines at 100 characters
-      var body = wrap(answers.body, wrapOptions);
-      var footer = wrap(answers.footer, wrapOptions);
+        // parentheses are only needed when a scope is present
+        var scope = answers.scope.trim();
+        scope = scope ? '(' + answers.scope.trim() + ')' : '';
 
-      commit(head + '\n\n' + body + '\n\n' + footer);
-    });
+        // Hard limit this line
+        var head = answers.jira.trim() + ' ' + (answers.type + scope + ': ' + answers.subject.trim()).slice(0, maxLineWidth);
+
+        // Wrap these lines at 100 characters
+        var body = wrap(answers.body, wrapOptions);
+        var footer = wrap(answers.footer, wrapOptions);
+
+        commit(head + '\n\n' + body + '\n\n' + footer);
+      });
+    }
   }
-}
