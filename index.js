@@ -33,7 +33,7 @@ module.exports = {
             {
                 type: 'input',
                 name: 'jira',
-                message: 'JIRA ID: '
+                message: 'JIRA Ticket ID: '
             }, {
                 type: 'list',
                 name: 'type',
@@ -92,7 +92,7 @@ module.exports = {
                 width: maxLineWidth
             };
 
-            var products = 'CCNEW|FE|SVEAC|SM|SP|SPIL|FAPI|ELNEW|ESNEW|BO';
+            var products = 'CCNEW|FE|SVEAC|SM|SP|SPIL|SUOM|EL|FAPI|ELNEW|ESNEW|BO';
             var pattern = new RegExp('(\b' + products + '\b)+-{1}\\d{1,}');
 
             if (pattern.test(answers.jira) === false) {
