@@ -81,7 +81,7 @@ module.exports = {
                 name: 'footer',
                 message: 'List any breaking changes or issues closed by this change: '
             }
-        ], function(answers) {
+        ].then(function(answers) {
 
             var maxLineWidth = 100;
 
